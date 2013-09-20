@@ -81,7 +81,7 @@ SlidedeckPdfJs = {
     this.size = settings.size;
     this.scale = 1;
 
-    this.markdown = (settings.markdown && markdown) || false;
+    this.markdown = (settings.markdown && markdown) || false;
 
     this.buildViewer();
 
