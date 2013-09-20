@@ -81,6 +81,8 @@ SlidedeckPdfJs = {
     this.size = settings.size;
     this.scale = 1;
 
+    this.markdown = (settings.markdown && markdown) || false;
+
     this.buildViewer();
 
   },
@@ -167,7 +169,7 @@ SlidedeckPdfJs = {
 
   renderSpeakerNotes: function(notes) {
   	if(this.markdown) {
-  		this.$speakernotes.html(notes);
+  		this.$speakernotes.html(markdown.toHTML(notes));
   	} else {
   		this.$speakernotes.text(notes);
   	}

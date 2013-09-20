@@ -4,7 +4,8 @@
   "dependencies": {
     "jquery": "~2.0.0",
     "Swipe": "git@github.com:bradbirdsall/Swipe.git",
-    "history.js": "~1.8.0"
+    "history.js": "~1.8.0",
+    "markdown": "~0.5.0"
   },
   "version": "0.0.1",
   "authors": [

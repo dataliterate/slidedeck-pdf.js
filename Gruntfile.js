@@ -37,6 +37,7 @@ module.exports = function(grunt) {
           {src: ['src/bower_components/Swipe/swipe.js'], dest: 'example/js/swipe.js'},
           {src: ['vendor/pdf.js/build/generic/build/pdf.js'], dest: 'example/js/pdf.js'},
           {src: ['vendor/pdf.js/build/generic/build/pdf.worker.js'], dest: 'example/js/pdf.worker.js'},
+          {src: ['src/bower_components/markdown/lib/markdown.js'], dest: 'example/js/markdown.js'},
           {src: ['build/slidedeck-pdf.js'], dest: 'example/js/slidedeck-pdf.js'}
         ]
     	}
