@@ -19,7 +19,6 @@ SpeakerNotesParser.prototype = {
   },
 
   endLayout: function speakerNoteParserEndLayout() {
-    console.log("endLayout");
     this.layoutDone = true;
     this.analyseGeomsAndTextContent();
   },
@@ -42,9 +41,6 @@ SpeakerNotesParser.prototype = {
     }
     this.parsed = true;
 
-    console.log(this.textContent);
-    console.log(this.geoms);
-
     var bidiTexts = this.textContent.bidiTexts;
     var geoms = this.geoms;
     var speakerNotes = '';
@@ -57,7 +53,7 @@ SpeakerNotesParser.prototype = {
         continue;
       }
 
-      if(geom.y > this.size.height) {
+      if(geom.y > this.size.height * this.scale) {
         //@todo: 
         speakerNotes += bidiText.str + "\n";
       }
@@ -68,20 +64,19 @@ SpeakerNotesParser.prototype = {
 
 };
 
-window.SlidedeckPdfJs = SlidedeckPdfJs= {};
-SlidedeckPdfJs = {
+window.SlidedeckPdfJs = {
   current: 0,
   init: function(settings) {
-    PDFJS.workerSrc = 'js/pdf.worker.js';
 
     this.$presentation = settings.slidedeck;
     this.$speakernotes = settings.speakernotes;
 
     this.pdfUrl = settings.file;
     this.size = settings.size;
-    this.scale = 1;
+    this.scale = settings.scale || 1;
 
-    this.markdown = (settings.markdown && markdown) || false;
+    this.markdown = (settings.markdown && (typeof(markdown) != 'undefined')) || false;
+    this.afterRender = settings.afterRender || function noop() {};
 
     this.buildViewer();
 
@@ -110,7 +105,6 @@ SlidedeckPdfJs = {
       self.showSlide(pageNum);
     }
     History.Adapter.bind(window,'statechange', resovleState);
-
     // download pdf
     PDFJS.getDocument(this.pdfUrl).then(function gotPdf(_pdfDoc) {
       self.pdfDoc = _pdfDoc;
@@ -125,7 +119,6 @@ SlidedeckPdfJs = {
   showSlide: function(num) {
     this.current = num;
     
-    console.log("show page " + num);
     //render current,
     //this.renderSlide(num, this.$presentation.find('.slide').eq(num - 1));
     this.renderSlide(num, this.$presentation.find('.slide').eq(0));
@@ -143,8 +136,8 @@ SlidedeckPdfJs = {
       var canvas = $el.find('canvas')[0];
       var viewport = page.getViewport(self.scale);
       var ctx = canvas.getContext('2d');
-      canvas.height = self.size.height;
-      canvas.width = self.size.width;
+      canvas.height = self.size.height * self.scale;
+      canvas.width = self.size.width * self.scale;
 
       var speakerNotesParser = new SpeakerNotesParser({
         size: self.size,
@@ -163,6 +156,7 @@ SlidedeckPdfJs = {
 
       page.getTextContent().then(function textContentResolved(textContent) {
         speakerNotesParser.setTextContent(textContent);
+        self.afterRender();
       });
     });
   },
