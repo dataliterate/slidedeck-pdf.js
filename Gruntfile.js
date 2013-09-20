@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', 'build');
 
-  grunt.registerTask('watch', ['livereload-start', 'build:dev', 'regarde']);
+  grunt.registerTask('watch', ['livereload-start', 'build:eaxmple', 'regarde']);
   grunt.registerTask('build', ['concat:js', 'copy:build']);
   grunt.registerTask('build:example', ['build', 'copy:example']);
 };
