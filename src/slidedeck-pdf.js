@@ -1,31 +1,31 @@
 (function() {
 
 var SpeakerNotesParser = function(settings) {
-	this.init(settings);
-}
+  this.init(settings);
+};
 SpeakerNotesParser.prototype = {
 
-	parsed: false,
-	layoutDone: false,
-	init: function(settings) {
-		this.cb = settings.cb || function noop() {},
-		this.size = settings.size || {width: 0, height: 0},
-		this.scale = settings.scale || 1
-	},
+  parsed: false,
+  layoutDone: false,
+  init: function(settings) {
+    this.cb = settings.cb || function noop() {};
+    this.size = settings.size || {width: 0, height: 0};
+    this.scale = settings.scale || 1;
+  },
 
-	beginLayout: function speakerNoteParserBeginLayout() {
+  beginLayout: function speakerNoteParserBeginLayout() {
     this.geoms = [];
     this.textContent = false;
   },
 
   endLayout: function speakerNoteParserEndLayout() {
-  	console.log("endLayout");
-  	this.layoutDone = true;
-  	this.analyseGeomsAndTextContent();
+    console.log("endLayout");
+    this.layoutDone = true;
+    this.analyseGeomsAndTextContent();
   },
 
   appendText: function speakerNoteParserAppendText(geom) {
-  	this.geoms.push(geom);
+    this.geoms.push(geom);
   },
 
   setTextContent: function speakerNoteParserSetTextContent(textContent) {
@@ -34,20 +34,20 @@ SpeakerNotesParser.prototype = {
   },
 
   analyseGeomsAndTextContent: function speakerNoteParserAnalyseGeomsAndTextContent() {
-  	if(this.parsed) {
-  		return;
-  	}
-  	if(!this.textContent || !this.layoutDone) {
-  		return;
-  	}
-  	this.parsed = true;
+    if(this.parsed) {
+      return;
+    }
+    if(!this.textContent || !this.layoutDone) {
+      return;
+    }
+    this.parsed = true;
 
     console.log(this.textContent);
     console.log(this.geoms);
 
-  	var bidiTexts = this.textContent.bidiTexts;
-  	var geoms = this.geoms;
-  	var speakerNotes = '';
+    var bidiTexts = this.textContent.bidiTexts;
+    var geoms = this.geoms;
+    var speakerNotes = '';
 
     for (var i = 0; i < bidiTexts.length; i++) {
       var bidiText = bidiTexts[i];
@@ -58,7 +58,7 @@ SpeakerNotesParser.prototype = {
       }
 
       if(geom.y > this.size.height) {
-      	//@todo: 
+        //@todo: 
         speakerNotes += bidiText.str + "\n";
       }
     }
@@ -66,7 +66,7 @@ SpeakerNotesParser.prototype = {
     this.cb(speakerNotes);
   }
 
-}
+};
 
 window.SlidedeckPdfJs = SlidedeckPdfJs= {};
 SlidedeckPdfJs = {
@@ -94,7 +94,7 @@ SlidedeckPdfJs = {
     this.$slidedeck = $('<div class="slidedeck"><div class="slide"><canvas></canvas></div></div>');
     this.$presentation.html('').append(this.$slidedeck);
 
-    this.$presentation.find('.slide').click(function(e) {
+    this.$presentation.find('.slide').click(function(e) {
       e.preventDefault();
       if(e.pageX > $(window).width() / 2) {
         self.gotoSlide(self.current + 1);
@@ -106,7 +106,7 @@ SlidedeckPdfJs = {
 
     function resovleState() {
       var State = History.getState();
-      var pageNum = State.data.state || 1;
+      var pageNum = State.data.state || 1;
       self.showSlide(pageNum);
     }
     History.Adapter.bind(window,'statechange', resovleState);
@@ -118,7 +118,7 @@ SlidedeckPdfJs = {
     });
   },
 
-  gotoSlide: function(num) {
+  gotoSlide: function(num) {
     History.pushState({state: num}, "Slide " + num, "?slide=" + num);
   },
 
@@ -147,11 +147,11 @@ SlidedeckPdfJs = {
       canvas.width = self.size.width;
 
       var speakerNotesParser = new SpeakerNotesParser({
-      	size: self.size,
-      	scale: self.scale,
-      	cb: function(text) {
-      		self.renderSpeakerNotes(text)
-      	}
+        size: self.size,
+        scale: self.scale,
+        cb: function(text) {
+          self.renderSpeakerNotes(text);
+        }
       });
 
       var renderContext = {
@@ -164,17 +164,17 @@ SlidedeckPdfJs = {
       page.getTextContent().then(function textContentResolved(textContent) {
         speakerNotesParser.setTextContent(textContent);
       });
-    })
+    });
   },
 
   renderSpeakerNotes: function(notes) {
-  	if(this.markdown) {
-  		this.$speakernotes.html(markdown.toHTML(notes));
-  	} else {
-  		this.$speakernotes.text(notes);
-  	}
+    if(this.markdown) {
+      this.$speakernotes.html(markdown.toHTML(notes));
+    } else {
+      this.$speakernotes.text(notes);
+    }
   }
 
-}
+};
 
 }());
