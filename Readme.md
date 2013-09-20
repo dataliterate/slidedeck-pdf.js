@@ -13,7 +13,7 @@ Also, we wanted a more integrated way to embed slidedeck content on our website.
 
 # Usage
 
-Check out the (live demo)[http://preciousforever.github.io/slidedeck-pdf.js/]
+Check out the [live demo](http://preciousforever.github.io/slidedeck-pdf.js/)
 
 # Next up
 
