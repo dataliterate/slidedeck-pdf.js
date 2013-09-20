@@ -6,11 +6,17 @@
 		<script src="js/pdf.js"></script>
 		<script src="js/slidedeck-pdf.js"></script>
 		<script>
-		SlidedeckPdfJs.init({
-			slidedeck: $('#slidedeck'),
-			speakernotes: $('#speakernotes'),
-			size: [1280, 720]
-		});
+		$(document).ready(function() {
+			SlidedeckPdfJs.init({
+				file: 'slidedeck.pdf',
+				slidedeck: $('#slidedeck'),
+				speakernotes: $('#speakernotes'),
+				size: {
+					width: 1280,
+					height: 720
+				}
+			});
+		})
 		</script>
 	</head>
 
