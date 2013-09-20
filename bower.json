@@ -3,7 +3,8 @@
   "url": "https://github.com/preciousforever/slidedeck-pdf.js",
   "dependencies": {
     "jquery": "~2.0.0",
-    "Swipe": "git@github.com:bradbirdsall/Swipe.git"
+    "Swipe": "git@github.com:bradbirdsall/Swipe.git",
+    "history.js": "~1.8.0"
   },
   "version": "0.0.1",
   "authors": [
