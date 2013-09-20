@@ -1,0 +1,23 @@
+{
+  "name": "slidedeck-pdf.js",
+  "url": "https://github.com/preciousforever/slidedeck-pdf.js",
+  "dependencies": {
+    "jquery": "~2.0.0",
+    "Swipe": "git@github.com:bradbirdsall/Swipe.git"
+  },
+  "version": "0.0.1",
+  "authors": [
+    "Michael Schieben <michael@precious-forever.com>"
+  ],
+  "main": "build/slidedeck-pdf.js",
+  "license": "MIT",
+  "homepage": "http://precious-forever.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,9 +1,0 @@
-{
-  "name": "slidedeck-pdf.js",
-  "description": "",
-  "url": "https://github.com/preciousforever/slidedeck-pdf.js",
-  "dependencies": {
-    "jquery": "~2.0.0",
-    "Swipe": "https://github.com/bradbirdsall/Swipe"
-  }
-}
