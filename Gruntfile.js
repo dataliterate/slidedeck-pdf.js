@@ -6,10 +6,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
 
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+
   grunt.loadNpmTasks('grunt-contrib-livereload');
   grunt.loadNpmTasks('grunt-regarde');
 
   grunt.loadNpmTasks('grunt-gh-pages');
+
+
 
   // Project configuration.
   grunt.initConfig({
@@ -21,20 +25,20 @@ module.exports = function(grunt) {
       },
       js: {
         src: [
-          'src/slidedeck-pdf.js'
-          , 'src/bower_components/history.js/scripts/bundled/html5/jquery.history.js'
+          'src/slidedeck-pdf.js',
+          'src/bower_components/history.js/scripts/bundled/html5/jquery.history.js'
           ],
         dest: 'tmp/slidedeck-pdf.js'
       },
     },
     copy: {
-    	'build': {
-    		files: [
+      'build': {
+        files: [
           {src: ['tmp/slidedeck-pdf.js'], dest: 'build/slidedeck-pdf.js'}
         ]
-    	},
-    	'example': {
-    		files: [
+      },
+      'example': {
+        files: [
           {src: ['src/bower_components/jquery/jquery.js'], dest: 'example/js/jquery.js'},
           {src: ['src/bower_components/Swipe/swipe.js'], dest: 'example/js/swipe.js'},
           {src: ['vendor/pdf.js/build/generic/build/pdf.js'], dest: 'example/js/pdf.js'},
@@ -42,7 +46,7 @@ module.exports = function(grunt) {
           {src: ['src/bower_components/markdown/lib/markdown.js'], dest: 'example/js/markdown.js'},
           {src: ['build/slidedeck-pdf.js'], dest: 'example/js/slidedeck-pdf.js'}
         ]
-    	}
+      }
     },
     /**
     * Live-Reload
@@ -57,6 +61,11 @@ module.exports = function(grunt) {
         tasks:['build:example', 'livereload']
       }
     },
+
+    jshint: {
+      all: ['Gruntfile.js', 'src/*.js']
+    },
+
     /**
     * gh-pages
     */
