@@ -9,6 +9,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-livereload');
   grunt.loadNpmTasks('grunt-regarde');
 
+  grunt.loadNpmTasks('grunt-gh-pages');
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -55,6 +57,15 @@ module.exports = function(grunt) {
         tasks:['build:example', 'livereload']
       }
     },
+    /**
+    * gh-pages
+    */
+    'gh-pages': {
+      options: {
+        base: 'example'
+      },
+      src: ['**']
+    }
   });
 
   grunt.registerTask('default', 'build');
