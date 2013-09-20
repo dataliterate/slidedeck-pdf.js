@@ -35,8 +35,8 @@ module.exports = function(grunt) {
     		files: [
           {src: ['src/bower_components/jquery/jquery.js'], dest: 'example/js/jquery.js'},
           {src: ['src/bower_components/Swipe/swipe.js'], dest: 'example/js/swipe.js'},
-          {src: ['vendor/pdf.js/generic/pdf.js'], dest: 'example/js/pdf.js'},
-          {src: ['vendor/pdf.js/generic/pdf.worker.js'], dest: 'example/js/pdf.worker.js'},
+          {src: ['vendor/pdf.js/build/generic/build/pdf.js'], dest: 'example/js/pdf.js'},
+          {src: ['vendor/pdf.js/build/generic/build/pdf.worker.js'], dest: 'example/js/pdf.worker.js'},
           {src: ['build/slidedeck-pdf.js'], dest: 'example/js/slidedeck-pdf.js'}
         ]
     	}
