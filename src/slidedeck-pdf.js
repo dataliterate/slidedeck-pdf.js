@@ -1,22 +1,86 @@
-var SlidedeckPdfJs = window.SlidedeckPdfJs = {};
+(function() {
 
+var SpeakerNotesParser = function(settings) {
+	this.init(settings);
+}
+SpeakerNotesParser.prototype = {
+
+	parsed: false,
+	layoutDone: false,
+	init: function(settings) {
+		this.cb = settings.cb || function noop() {},
+		this.size = settings.size || {width: 0, height: 0},
+		this.scale = settings.scale || 1
+	},
+
+	beginLayout: function speakerNoteParserBeginLayout() {
+    this.geoms = [];
+    this.textContent = false;
+  },
+
+  endLayout: function speakerNoteParserEndLayout() {
+  	console.log("endLayout");
+  	this.layoutDone = true;
+  	this.analyseGeomsAndTextContent();
+  },
+
+  appendText: function speakerNoteParserAppendText(geom) {
+  	this.geoms.push(geom);
+  },
+
+  setTextContent: function speakerNoteParserSetTextContent(textContent) {
+    this.textContent = textContent;
+    this.analyseGeomsAndTextContent();
+  },
+
+  analyseGeomsAndTextContent: function speakerNoteParserAnalyseGeomsAndTextContent() {
+  	if(this.parsed) {
+  		return;
+  	}
+  	if(!this.textContent || !this.layoutDone) {
+  		return;
+  	}
+  	this.parsed = true;
+
+    console.log(this.textContent);
+    console.log(this.geoms);
+
+  	var bidiTexts = this.textContent.bidiTexts;
+  	var geoms = this.geoms;
+  	var speakerNotes = '';
+
+    for (var i = 0; i < bidiTexts.length; i++) {
+      var bidiText = bidiTexts[i];
+      var geom = geoms[i];
+
+      if (!/\S/.test(bidiText.str)) {
+        continue;
+      }
+
+      if(geom.y > this.size.height) {
+      	//@todo: 
+        speakerNotes += bidiText.str + "\n";
+      }
+    }
+
+    this.cb(speakerNotes);
+  }
+
+}
+
+window.SlidedeckPdfJs = SlidedeckPdfJs= {};
 SlidedeckPdfJs = {
   current: 0,
   init: function(settings) {
-    PDFJS.workerSrc = Precious.base + 'js/pdf.worker.js';
+    PDFJS.workerSrc = 'js/pdf.worker.js';
 
-    // 1. look for elements precious-presentation class
-    this.$presentation = $('.precious-presentation');
+    this.$presentation = settings.slidedeck;
+    this.$speakernotes = settings.speakernotes;
 
-    // read source of pdf, json (with speakernotes) and poster image
-    this.pdfUrl = this.$presentation.find('a').attr('href');
+    this.pdfUrl = settings.file;
+    this.size = settings.size;
+    this.scale = 1;
 
-    // show poster image
-
-    // if touch / mobile / slow devices
-    // --> display link to pdf download
-
-    // else build slidedeck viewer
     this.buildViewer();
 
   },
@@ -31,9 +95,9 @@ SlidedeckPdfJs = {
     this.$presentation.find('.slide').click(function(e) {
       e.preventDefault();
       if(e.pageX > $(window).width() / 2) {
-        self.gotoPage(self.current + 1);
+        self.gotoSlide(self.current + 1);
       } else {
-        self.gotoPage(self.current - 1);
+        self.gotoSlide(self.current - 1);
       }
       
     });
@@ -41,7 +105,7 @@ SlidedeckPdfJs = {
     function resovleState() {
       var State = History.getState();
       var pageNum = State.data.state || 1;
-      self.showPage(pageNum);
+      self.showSlide(pageNum);
     }
     History.Adapter.bind(window,'statechange', resovleState);
 
@@ -52,11 +116,11 @@ SlidedeckPdfJs = {
     });
   },
 
-  gotoPage: function(num) {
-    History.pushState({state: num}, "Page " + num, "?page=" + num);
+  gotoSlide: function(num) {
+    History.pushState({state: num}, "Slide " + num, "?slide=" + num);
   },
 
-  showPage: function(num) {
+  showSlide: function(num) {
     this.current = num;
     
     console.log("show page " + num);
@@ -71,30 +135,44 @@ SlidedeckPdfJs = {
 
   renderSlide: function(num, $el) {
     // render function
-    console.log($el);
+    var self = this;
     this.pdfDoc.getPage(num).then(function(page) {
 
       var canvas = $el.find('canvas')[0];
-      var viewport = page.getViewport($el.width() / 1280);
+      var viewport = page.getViewport(self.scale);
       var ctx = canvas.getContext('2d');
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+      canvas.height = self.size.height;
+      canvas.width = self.size.width;
+
+      var speakerNotesParser = new SpeakerNotesParser({
+      	size: self.size,
+      	scale: self.scale,
+      	cb: function(text) {
+      		self.renderSpeakerNotes(text)
+      	}
+      });
 
       var renderContext = {
           canvasContext: ctx,
+          textLayer: speakerNotesParser,
           viewport: viewport
       };
       page.render(renderContext);
+
+      page.getTextContent().then(function textContentResolved(textContent) {
+        speakerNotesParser.setTextContent(textContent);
+      });
     })
   },
 
-  renderSpeakerNotes: function(num) {
-
+  renderSpeakerNotes: function(notes) {
+  	if(this.markdown) {
+  		this.$speakernotes.html(notes);
+  	} else {
+  		this.$speakernotes.text(notes);
+  	}
   }
 
 }
 
-//  And bind loading
-$(document).ready(function() {
-  Precious.Presentation.init();
-});
+}());
