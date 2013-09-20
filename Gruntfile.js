@@ -26,7 +26,7 @@ module.exports = function(grunt) {
       js: {
         src: [
           'src/slidedeck-pdf.js',
-          'src/bower_components/history.js/scripts/bundled/html5/jquery.history.js'
+          //'src/bower_components/history.js/scripts/bundled/html5/jquery.history.js'
           ],
         dest: 'tmp/slidedeck-pdf.js'
       },
@@ -44,6 +44,7 @@ module.exports = function(grunt) {
           {src: ['vendor/pdf.js/build/generic/build/pdf.js'], dest: 'example/js/pdf.js'},
           {src: ['vendor/pdf.js/build/generic/build/pdf.worker.js'], dest: 'example/js/pdf.worker.js'},
           {src: ['src/bower_components/markdown/lib/markdown.js'], dest: 'example/js/markdown.js'},
+          {src: ['src/bower_components/history.js/scripts/bundled/html5/jquery.history.js'], dest: 'example/js/jquery.history.js'},
           {src: ['build/slidedeck-pdf.js'], dest: 'example/js/slidedeck-pdf.js'}
         ]
       }
@@ -79,7 +80,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', 'build');
 
-  grunt.registerTask('watch', ['livereload-start', 'build:eaxmple', 'regarde']);
+  grunt.registerTask('watch', ['build:eaxmple', 'regarde']);
   grunt.registerTask('build', ['concat:js', 'copy:build']);
   grunt.registerTask('build:example', ['build', 'copy:example']);
 };
