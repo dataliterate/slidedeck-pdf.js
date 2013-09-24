@@ -147,6 +147,7 @@ window.SlidedeckPdfJs = {
         }
       });
 
+    this.total = this.pdfDoc.pdfInfo.numPages;
       var renderContext = {
           canvasContext: ctx,
           textLayer: speakerNotesParser,

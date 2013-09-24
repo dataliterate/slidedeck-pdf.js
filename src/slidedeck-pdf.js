@@ -70,6 +70,7 @@ window.SlidedeckPdfJs = SlidedeckPdfJs = function(settings) {
 
 SlidedeckPdfJs.prototype = {
   current: 0,
+  total: 0,
   init: function(settings) {
 
     this.$presentation = settings.slidedeck;
