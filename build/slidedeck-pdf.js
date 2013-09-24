@@ -152,11 +152,26 @@ window.SlidedeckPdfJs = {
           textLayer: speakerNotesParser,
           viewport: viewport
       };
-      page.render(renderContext);
+
+      var rendered = false;
+      var gotTextContent = false;
+      function onceRenderedAndTextContent() {
+        console.log('onceRenderedAndTextContent');
+        if(!rendered || !gotTextContent) {
+          console.log("chj", rendered, gotTextContent);
+          return;
+        }
+        self.afterRender();
+      };
+      page.render(renderContext).then(function afterRender() {
+        rendered = true;
+        onceRenderedAndTextContent();
+      });;
 
       page.getTextContent().then(function textContentResolved(textContent) {
         speakerNotesParser.setTextContent(textContent);
-        self.afterRender();
+        gotTextContent = true;
+        onceRenderedAndTextContent();
       });
     });
   },
