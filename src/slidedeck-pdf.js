@@ -64,7 +64,11 @@ SpeakerNotesParser.prototype = {
 
 };
 
-window.SlidedeckPdfJs = {
+window.SlidedeckPdfJs = SlidedeckPdfJs = function(settings) {
+  this.init(settings);
+};
+
+SlidedeckPdfJs.prototype = {
   current: 0,
   init: function(settings) {
 
