@@ -83,6 +83,15 @@ window.SlidedeckPdfJs = {
 
   },
 
+  nextSlide: function() {
+
+    this.gotoSlide(this.current + 1);
+  },
+
+  previousSlide: function() {
+    this.gotoSlide(this.current - 1);
+  },
+
   buildViewer: function() {
 
     var self = this;
@@ -132,6 +141,7 @@ window.SlidedeckPdfJs = {
   renderSlide: function(num, $el) {
     // render function
     var self = this;
+    this.total = this.pdfDoc.pdfInfo.numPages;
     this.pdfDoc.getPage(num).then(function(page) {
 
       var canvas = $el.find('canvas')[0];
@@ -142,7 +152,6 @@ window.SlidedeckPdfJs = {
 
       var speakerNotesParser = new SpeakerNotesParser({
         size: self.size,
-    this.total = this.pdfDoc.pdfInfo.numPages;
         scale: self.scale,
         cb: function(text) {
           self.renderSpeakerNotes(text);
