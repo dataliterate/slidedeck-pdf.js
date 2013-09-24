@@ -66,6 +66,7 @@ SpeakerNotesParser.prototype = {
 
 window.SlidedeckPdfJs = {
   current: 0,
+  total: 0,
   init: function(settings) {
 
     this.$presentation = settings.slidedeck;
@@ -141,6 +142,7 @@ window.SlidedeckPdfJs = {
 
       var speakerNotesParser = new SpeakerNotesParser({
         size: self.size,
+    this.total = this.pdfDoc.pdfInfo.numPages;
         scale: self.scale,
         cb: function(text) {
           self.renderSpeakerNotes(text);
