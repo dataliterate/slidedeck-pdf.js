@@ -145,6 +145,7 @@ SlidedeckPdfJs.prototype = {
   renderSlide: function(num, $el) {
     // render function
     var self = this;
+    this.total = this.pdfDoc.pdfInfo.numPages;
     this.pdfDoc.getPage(num).then(function(page) {
 
       var canvas = $el.find('canvas')[0];
