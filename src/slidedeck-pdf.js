@@ -87,6 +87,15 @@ SlidedeckPdfJs.prototype = {
 
   },
 
+  nextSlide: function() {
+
+    this.gotoSlide(this.current + 1);
+  },
+
+  previousSlide: function() {
+    this.gotoSlide(this.current - 1);
+  },
+
   buildViewer: function() {
 
     var self = this;
