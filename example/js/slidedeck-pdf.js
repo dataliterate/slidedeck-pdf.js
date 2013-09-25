@@ -64,8 +64,13 @@ SpeakerNotesParser.prototype = {
 
 };
 
-window.SlidedeckPdfJs = {
+window.SlidedeckPdfJs = SlidedeckPdfJs = function(settings) {
+  this.init(settings);
+};
+
+SlidedeckPdfJs.prototype = {
   current: 0,
+  total: 0,
   init: function(settings) {
 
     this.$presentation = settings.slidedeck;
@@ -77,9 +82,19 @@ window.SlidedeckPdfJs = {
 
     this.markdown = (settings.markdown && (typeof(markdown) != 'undefined')) || false;
     this.afterRender = settings.afterRender || function noop() {};
+    this.progress = settings.progress || function noop() {};
 
     this.buildViewer();
 
+  },
+
+  nextSlide: function() {
+
+    this.gotoSlide(this.current + 1);
+  },
+
+  previousSlide: function() {
+    this.gotoSlide(this.current - 1);
   },
 
   buildViewer: function() {
@@ -106,14 +121,14 @@ window.SlidedeckPdfJs = {
     }
     History.Adapter.bind(window,'statechange', resovleState);
     // download pdf
-    PDFJS.getDocument(this.pdfUrl).then(function gotPdf(_pdfDoc) {
+    PDFJS.getDocument(this.pdfUrl, null, null, this.progress).then(function gotPdf(_pdfDoc) {
       self.pdfDoc = _pdfDoc;
       resovleState();
     });
   },
 
   gotoSlide: function(num) {
-    History.pushState({state: num}, "Slide " + num, "?slide=" + num);
+    History.pushState({state: num}, window.document.title, "?slide=" + num);
   },
 
   showSlide: function(num) {
@@ -128,9 +143,14 @@ window.SlidedeckPdfJs = {
 
   },
 
+  rerender: function() {
+    this.showSlide(this.current);
+  },
+
   renderSlide: function(num, $el) {
     // render function
     var self = this;
+    this.total = this.pdfDoc.pdfInfo.numPages;
     this.pdfDoc.getPage(num).then(function(page) {
 
       var canvas = $el.find('canvas')[0];
@@ -147,17 +167,31 @@ window.SlidedeckPdfJs = {
         }
       });
 
-    this.total = this.pdfDoc.pdfInfo.numPages;
       var renderContext = {
           canvasContext: ctx,
           textLayer: speakerNotesParser,
           viewport: viewport
       };
-      page.render(renderContext);
+
+      var rendered = false;
+      var gotTextContent = false;
+      function onceRenderedAndTextContent() {
+        
+        if(!rendered || !gotTextContent) {
+          
+          return;
+        }
+        self.afterRender();
+      };
+      page.render(renderContext).then(function afterRender() {
+        rendered = true;
+        onceRenderedAndTextContent();
+      });;
 
       page.getTextContent().then(function textContentResolved(textContent) {
         speakerNotesParser.setTextContent(textContent);
-        self.afterRender();
+        gotTextContent = true;
+        onceRenderedAndTextContent();
       });
     });
   },

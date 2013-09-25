@@ -64,7 +64,11 @@ SpeakerNotesParser.prototype = {
 
 };
 
-window.SlidedeckPdfJs = {
+window.SlidedeckPdfJs = SlidedeckPdfJs = function(settings) {
+  this.init(settings);
+};
+
+SlidedeckPdfJs.prototype = {
   current: 0,
   total: 0,
   init: function(settings) {
@@ -78,6 +82,7 @@ window.SlidedeckPdfJs = {
 
     this.markdown = (settings.markdown && (typeof(markdown) != 'undefined')) || false;
     this.afterRender = settings.afterRender || function noop() {};
+    this.progress = settings.progress || function noop() {};
 
     this.buildViewer();
 
@@ -116,14 +121,14 @@ window.SlidedeckPdfJs = {
     }
     History.Adapter.bind(window,'statechange', resovleState);
     // download pdf
-    PDFJS.getDocument(this.pdfUrl).then(function gotPdf(_pdfDoc) {
+    PDFJS.getDocument(this.pdfUrl, null, null, this.progress).then(function gotPdf(_pdfDoc) {
       self.pdfDoc = _pdfDoc;
       resovleState();
     });
   },
 
   gotoSlide: function(num) {
-    History.pushState({state: num}, "Slide " + num, "?slide=" + num);
+    History.pushState({state: num}, window.document.title, "?slide=" + num);
   },
 
   showSlide: function(num) {
@@ -136,6 +141,10 @@ window.SlidedeckPdfJs = {
 
     // the previous page
 
+  },
+
+  rerender: function() {
+    this.showSlide(this.current);
   },
 
   renderSlide: function(num, $el) {
@@ -167,9 +176,9 @@ window.SlidedeckPdfJs = {
       var rendered = false;
       var gotTextContent = false;
       function onceRenderedAndTextContent() {
-        console.log('onceRenderedAndTextContent');
+        
         if(!rendered || !gotTextContent) {
-          console.log("chj", rendered, gotTextContent);
+          
           return;
         }
         self.afterRender();
