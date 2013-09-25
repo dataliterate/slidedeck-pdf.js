@@ -82,6 +82,7 @@ SlidedeckPdfJs.prototype = {
 
     this.markdown = (settings.markdown && (typeof(markdown) != 'undefined')) || false;
     this.afterRender = settings.afterRender || function noop() {};
+    this.progress = settings.progress || function noop() {};
 
     this.buildViewer();
 
@@ -120,7 +121,7 @@ SlidedeckPdfJs.prototype = {
     }
     History.Adapter.bind(window,'statechange', resovleState);
     // download pdf
-    PDFJS.getDocument(this.pdfUrl).then(function gotPdf(_pdfDoc) {
+    PDFJS.getDocument(this.pdfUrl, null, null, this.progress).then(function gotPdf(_pdfDoc) {
       self.pdfDoc = _pdfDoc;
       resovleState();
     });
