@@ -142,6 +142,10 @@ SlidedeckPdfJs.prototype = {
 
   },
 
+  rerender: function() {
+    this.showSlide(this.current);
+  },
+
   renderSlide: function(num, $el) {
     // render function
     var self = this;
