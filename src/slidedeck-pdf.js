@@ -128,7 +128,7 @@ SlidedeckPdfJs.prototype = {
   },
 
   gotoSlide: function(num) {
-    History.pushState({state: num}, "Slide " + num, "?slide=" + num);
+    History.pushState({state: num}, window.document.title, "?slide=" + num);
   },
 
   showSlide: function(num) {
