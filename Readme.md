@@ -1,7 +1,7 @@
 # slidedeck-pdf.js
 
 Renders Keynote generated PDF-Slidedecks in your browser, with a focus on 
-speakernotes - An experimental javascript glue between pdf.js and (not yet) swipejs
+speakernotes - An experimental javascript project based on pdf.js
 
 ## A story
 When Christophe came back from MobX conference where he gave a talk he
@@ -17,11 +17,14 @@ Check out the [live demo](http://preciousforever.github.io/slidedeck-pdf.js/)
 
 # Next up
 
-- scaling
-- SpeakerNoteParser should anaylse and keep line breaks
-- animation between slides
-- loading incator
-- links on slides
+- [x] scaling
+- [x] loading incator  
+  could be realized via a callback
+- [ ] remove jquery and History.js dependency
+- [ ] better API
+- [ ] links on slides (as seen in pdf.js viewer code)
+- [ ] SpeakerNoteParser should anaylse and keep line breaks
+
 
 # Development
 
