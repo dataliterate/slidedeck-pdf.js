@@ -176,9 +176,9 @@ SlidedeckPdfJs.prototype = {
       var rendered = false;
       var gotTextContent = false;
       function onceRenderedAndTextContent() {
-        console.log('onceRenderedAndTextContent');
+        
         if(!rendered || !gotTextContent) {
-          console.log("chj", rendered, gotTextContent);
+          
           return;
         }
         self.afterRender();
