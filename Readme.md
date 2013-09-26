@@ -1,7 +1,8 @@
 # slidedeck-pdf.js
 
-Renders Keynote generated PDF-Slidedecks in your browser, with a focus on 
-speakernotes - An experimental javascript project based on pdf.js
+Experimental slidedeck viewer based on pdf.js: it renders Apple Keynote exported
+PDFs with speaker notes in the browser, extracts and cuts off the notes and
+displays them as HTML.
 
 ## A story
 When Christophe came back from MobX conference where he gave a talk he
